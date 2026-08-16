@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 // Capture Suggestion list from Google -> Without generic method
-public class SuggestionList1 {
+public class SuggestionList_01 {
 	static WebDriver driver;
 
 	public static void main(String[] args) throws InterruptedException {

@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 //Capture Suggestion list from Google -> With generic method
-public class SuggestionList2 {
+public class SuggestionList_02 {
 
 	static WebDriver driver;
 

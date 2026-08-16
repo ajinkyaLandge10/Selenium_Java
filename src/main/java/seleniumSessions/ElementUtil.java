@@ -6,6 +6,8 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 public class ElementUtil {
 	private WebDriver driver;
@@ -164,4 +166,160 @@ public class ElementUtil {
 			}
 		}
 	}
+	
+	
+//		||********************************* Select Drop-Down Utility *********************************||
+	
+	private Select createSelect(By locator) {				//--> This method will create select object in every method below..  
+		Select select = new Select(getElement(locator));
+		return select;
+	}
+	
+	public void doSelectDropDownByIndex(By locator, int index) {
+//		Select select = new Select(getElement(locator));    //--> createSelect method will help to skip this part
+//		select.selectByIndex(index);
+		createSelect(locator).selectByIndex(index);
+	}
+	public void doSelectDropDownByVisibleText(By locator, String visibleText) {
+//		Select select = new Select(getElement(locator));
+//		select.selectByVisibleText(visibleText);
+		createSelect(locator).selectByVisibleText(visibleText);
+	}
+	public void doSelectDropDownByValue(By locator, String value) {
+//		Select select = new Select(getElement(locator));
+//		select.selectByValue(value);
+		createSelect(locator).selectByValue(value);
+	}
+	public int getDropDownOptionsCount(By locator) {
+//		Select select = new Select(getElement(locator));
+//		return select.getOptions().size();
+		return createSelect(locator).getOptions().size();
+	}
+	public List<String> getDropDownOptions(By locator) {
+//		Select select = new Select(getElement(locator));
+
+		List<WebElement> optionsList = createSelect(locator).getOptions();
+		List<String> optionsTextList = new ArrayList<String>();
+
+		for (WebElement e : optionsList) {
+			String text = e.getText();
+			optionsTextList.add(text);
+		}
+		return optionsTextList;
+	}
+	public void selectDropDownOptions(By locator, String dropDownValue) {
+//		Select select = new Select(getElement(locator));
+		List<WebElement> optionsList = createSelect(locator).getOptions();
+		System.out.println(optionsList.size());
+
+		for (WebElement e : optionsList) {
+			String text = e.getText();
+			System.out.println(text);
+			if (text.equals(dropDownValue)) {
+				e.click();
+				break;
+			}
+		}
+
+	}
+	public void selectDropDownvalueWithoutSelect(By locator, String value) {
+		List<WebElement> optionsList = getElements(locator);
+		for(WebElement e: optionsList) {
+			String text = e.getText();
+			if(text.equals(value)) {
+				e.click();
+				break;
+			}
+		}
+	}
+	
+	public boolean isDropDownMultiple(By locator) {
+//		Select select = new Select(getElement(locator));
+//		return select.isMultiple() ? true : false;
+		return createSelect(locator).isMultiple() ? true : false;
+	}
+
+	/**
+	 * This method is used to select values from DropDown. It can Select:
+	 * 1. Single Selection
+	 * 2. Multiple Selection
+	 * 3. All Selection :- Please Pass "SelectAll" as value Parameter, to select all values from DropDown.
+	 * @param locator
+	 * @param values
+	 */
+	public void selectDropDownMultipleValues(By locator,By optionsLocator, String... values) {  // '...'  -> SpreadOperator
+//		Select select = new Select(getElement(locator));
+
+		if (isDropDownMultiple(locator)) {
+			if (values[0].equalsIgnoreCase("SelectAll")) {
+				List<WebElement> optionsList = getElements(optionsLocator);
+				for (WebElement e : optionsList) {
+					e.click();
+				}
+			}else {
+				for (String value : values) {
+					createSelect(locator).selectByVisibleText(value);
+				}
+			}
+
+		}
+	}
+	
+	
+//	||********************************* Actions Class Utility *********************************||
+	
+	public void doActionsSendKeys(By locator,String value) {
+		Actions act = new Actions(driver);
+		act.sendKeys(getElement(locator),value).perform();
+	}
+	public void doActionsClick(By locator) {
+		Actions act = new Actions(driver);
+		act.click(getElement(locator)).perform();
+	}
+	
+	public void twoLevelMenuHandle(By parentMenuLocator, By childMenuLocator) throws InterruptedException {
+		Actions act = new Actions(driver);
+		act.moveToElement(getElement(parentMenuLocator))
+			.build()
+				.perform();
+		Thread.sleep(2000);
+//		driver.findElement(childMenuLocator).click();
+		doClick(childMenuLocator);
+	}
+	
+	public void fourLevelMenuHandle(By parentMenuLocator, By firstChildMenuLocator, By secondChildMenuLocator,
+			By thirdChildMenuLocator) throws InterruptedException {
+
+		Actions act = new Actions(driver);
+//		driver.findElement(parentMenuLocator).click();
+		doClick(parentMenuLocator);
+		Thread.sleep(1000);
+		act.moveToElement(getElement(firstChildMenuLocator)).build().perform();
+		Thread.sleep(1000);
+		act.moveToElement(getElement(secondChildMenuLocator)).build().perform();
+		Thread.sleep(1000);
+//		driver.findElement(thirdChildMenuLocator).click();
+		doClick(thirdChildMenuLocator);
+	}
+	
+	public void doActionsSendKeysWithPause(By locator, String value) {
+		Actions act = new Actions(driver);
+		char val[] = value.toCharArray();
+		for (char c : val) {
+			act.sendKeys(getElement(locator), String.valueOf(c))
+				.pause(500)
+					.build()
+						.perform();
+		}
+	}
+	
+	public void doClickByScrollToElement(By locator) {
+		Actions act = new Actions(driver);
+		act.scrollToElement(getElement(locator))
+			.click(getElement(locator))
+				.build()
+					.perform();
+		
+	}
+	
 }

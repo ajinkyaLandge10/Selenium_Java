@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 //Capture Footer Links on the WebPage. Create Generic function
-public class FooterLinks2 {
+public class FooterLinks_02 {
 
 	static WebDriver driver;
 
