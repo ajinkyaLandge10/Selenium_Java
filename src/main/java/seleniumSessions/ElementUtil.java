@@ -11,6 +11,7 @@ import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -560,8 +561,9 @@ public class ElementUtil {
 		wait.pollingEvery(Duration.ofSeconds(2))
 				.withMessage("TimeOut done..& Element Is Not Found...")
 					.ignoring(NoSuchElementException.class)
-						.ignoring(ElementNotInteractableException.class)
-							.ignoring(TimeoutException.class);
+						.ignoring(StaleElementReferenceException.class)
+							.ignoring(ElementNotInteractableException.class)
+								.ignoring(TimeoutException.class);
 						  
 			return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
