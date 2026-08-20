@@ -4,6 +4,7 @@ import java.time.Duration;
 //@formatter:off
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -637,9 +638,20 @@ public class ElementUtil {
 		}
 	
 	
-	
-	
-	
+//		||********************************* Streams Utility *********************************||	
+		
+		public void printListUsingStreams(By locator) {
+			driver.findElements(locator)
+				.stream()
+					.forEach(e -> System.out.println(e.getText()));
+		}	
+		
+		public List<String> getListUsingStreams(By locator) {
+			return driver.findElements(locator)
+			.stream()
+				.map(e -> e.getText())
+					.collect(Collectors.toList());
+		}
 	
 	
 	
